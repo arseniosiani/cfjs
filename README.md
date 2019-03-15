@@ -6,7 +6,7 @@ Semplice e diretto!
 
 # Intallation
 
-  npm i @arseniosiani/cfjs --save
+    npm i @arseniosiani/cfjs --save
 
 # Usage
 

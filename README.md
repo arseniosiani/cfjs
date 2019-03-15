@@ -4,10 +4,14 @@
 Modulo nodejs che il effettua il check/creazione/parsing del Codice Fiscale italiano, l'elenco dei comuni italiani viene aggiornato [dal repo di matteocontrini](https://github.com/matteocontrini/comuni-json); buona parte della logica proviene [dal repo di lucavandro](https://github.com/lucavandro/CodiceFiscaleJS)
 Semplice e diretto!
 
-**Usage**
+# Intallation
+
+  npm i @arseniosiani/cfjs --save
+
+# Usage
 
 ```javascript
-const  cfjs  =  require('cfjs');
+const  cfjs  =  require('@arseniosiani/cfjs');
 let  infos  =  cfjs.parse("RSSMRA72L09H501S");
 console.log(infos);
 // {

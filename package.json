@@ -1,0 +1,33 @@
+{
+  "name": "cfjs",
+  "version": "1.0.0",
+  "description": "Modulo nodejs che il effettua il check/creazione/parsing del Codice Fiscale italiano",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arseniosiani/cfjs.git"
+  },
+  "keywords": [
+    "codicefiscale",
+    "cf",
+    "codice",
+    "fiscale",
+    "nodejs",
+    "node"
+  ],
+  "author": "Arsenio Siani",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arseniosiani/cfjs/issues"
+  },
+  "homepage": "https://github.com/arseniosiani/cfjs#readme",
+  "dependencies": {
+    "moment": "^2.24.0"
+  },
+  "devDependencies": {
+    "mocha": "^6.0.2"
+  }
+}

@@ -1,26 +1,36 @@
-let assert = require('assert');
-const cfjs = require('../index');
+const assert = require('assert')
+const cfjs = require('../index')
 
+// eslint-disable-next-line no-undef
 describe('parse', function () {
   it('parse codice fiscale valido', function () {
-    let infos = cfjs.parse("RSSMRA72L09H501S");
-    assert.equal(infos.nome, "MRA");
-    assert.equal(infos.cognome, "RSS");
-    assert.equal(infos.sesso, "M");
-    assert.equal(infos.data_nascita, "1972-07-09");
-    assert.equal(infos.cap_nascita, "00118");
-    assert.equal(infos.cod_catastale_nascita, "H501");
-  });
+    const infos = cfjs.parse('RSSMRA72L09H501S')
+    assert.strictEqual(infos.nome, 'MRA')
+    assert.strictEqual(infos.cognome, 'RSS')
+    assert.strictEqual(infos.sesso, 'M')
+    assert.strictEqual(infos.data_nascita, '1972-07-09')
+    assert.strictEqual(infos.cap_nascita, '00118')
+    assert.strictEqual(infos.cod_catastale_nascita, 'H501')
+  })
+  it('parse codice fiscale valido estero', function () {
+    const infos = cfjs.parse('RSSMRA72L09Z247X')
+    assert.strictEqual(infos.nome, 'MRA')
+    assert.strictEqual(infos.cognome, 'RSS')
+    assert.strictEqual(infos.sesso, 'M')
+    assert.strictEqual(infos.data_nascita, '1972-07-09')
+    // assert.strictEqual(infos.cap_nascita, '00118')
+    assert.strictEqual(infos.cod_catastale_nascita, 'Z247')
+  })
   it('check codice fiscale valido', function () {
-    let valid = cfjs.check("RSSMRA72L09H501S");
-    assert.equal(valid, true);
-  });
+    const valid = cfjs.check('RSSMRA72L09H501S')
+    assert.strictEqual(valid, true)
+  })
   it('check codice fiscale NON valido', function () {
-    let valid = cfjs.check("RSSMRA72L09H501B");
-    assert.equal(valid, false);
-  });
+    const valid = cfjs.check('RSSMRA72L09H501B')
+    assert.strictEqual(valid, false)
+  })
   it('stringify anagrafica', function () {
-    let infos = {
+    const infos = {
       nome: 'MARIO',
       cognome: 'ROSSI',
       sesso: 'M',
@@ -30,33 +40,33 @@ describe('parse', function () {
       cap_nascita: '00118',
       cod_catastale_nascita: 'H501'
     }
-    let cf = cfjs.stringify(infos);
-    assert.equal(cf, "RSSMRA72L09H501S");
-  });
+    const cf = cfjs.stringify(infos)
+    assert.strictEqual(cf, 'RSSMRA72L09H501S')
+  })
   it('stringify anagrafica con solo codice catastale', function () {
-    let infos = {
+    const infos = {
       nome: 'MARIO',
       cognome: 'ROSSI',
       sesso: 'M',
       data_nascita: '1972-07-09',
       cod_catastale_nascita: 'H501'
     }
-    let cf = cfjs.stringify(infos);
-    assert.equal(cf, "RSSMRA72L09H501S");
-  });
+    const cf = cfjs.stringify(infos)
+    assert.strictEqual(cf, 'RSSMRA72L09H501S')
+  })
   it('stringify anagrafica con solo CAP', function () {
-    let infos = {
+    const infos = {
       nome: 'MARIO',
       cognome: 'ROSSI',
       sesso: 'M',
       data_nascita: '1972-07-09',
       cap_nascita: '00118',
     }
-    let cf = cfjs.stringify(infos);
-    assert.equal(cf, "RSSMRA72L09H501S");
-  });
+    const cf = cfjs.stringify(infos)
+    assert.strictEqual(cf, 'RSSMRA72L09H501S')
+  })
   it('stringify anagrafica con provincia e comune', function () {
-    let infos = {
+    const infos = {
       nome: 'MARIO',
       cognome: 'ROSSI',
       sesso: 'M',
@@ -64,30 +74,41 @@ describe('parse', function () {
       comune_nascita: 'Roma',
       provincia_nascita: 'RM',
     }
-    let cf = cfjs.stringify(infos);
-    assert.equal(cf, "RSSMRA72L09H501S");
-  });
+    const cf = cfjs.stringify(infos)
+    assert.strictEqual(cf, 'RSSMRA72L09H501S')
+  })
   it('stringify anagrafica con solo comune', function () {
-    let infos = {
+    const infos = {
       nome: 'MARIO',
       cognome: 'ROSSI',
       sesso: 'M',
       data_nascita: '1972-07-09',
       comune_nascita: 'Roma'
     }
-    let cf = cfjs.stringify(infos);
-    assert.equal(cf, "RSSMRA72L09H501S");
-  });
+    const cf = cfjs.stringify(infos)
+    assert.strictEqual(cf, 'RSSMRA72L09H501S')
+  })
   it('stringify anagrafica con provincia e comune errati', function () {
-    let infos = {
+    const infos = {
       nome: 'MARIO',
       cognome: 'ROSSI',
       sesso: 'M',
       data_nascita: '1972-07-09',
       comune_nascita: 'Firenzesex'
     }
-    let cf = cfjs.stringify(infos);
-    assert.equal(cf, false);
-  });
+    const cf = cfjs.stringify(infos)
+    assert.strictEqual(cf, false)
+  })
+  it('stringify anagrafica con solo codice catastale estero', function () {
+    const infos = {
+      nome: 'MARIO',
+      cognome: 'ROSSI',
+      sesso: 'M',
+      data_nascita: '1972-07-09',
+      cod_catastale_nascita: 'Z247'
+    }
+    const cf = cfjs.stringify(infos)
+    assert.strictEqual(cf, 'RSSMRA72L09Z247X')
+  })
 
-});
+})

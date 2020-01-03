@@ -10,6 +10,7 @@ const checkCodeChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 const monthCodes = ['A', 'B', 'C', 'D', 'E', 'H', 'L', 'M', 'P', 'R', 'S', 'T']
 
 const comuni = require('./comuni')
+const comuniEsteri = require('./comuni_esteri')
 const moment = require('moment')
 
 module.exports = {
@@ -35,17 +36,35 @@ module.exports = {
     const dataNascita = year + '-' + month.toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0')
 
     const codiceCatastale = cf.substr(11, 4)
-    const luogoNascita = comuni.find(i => i.codiceCatastale === codiceCatastale)
-    return {
-      nome: cf.substr(3, 3),
-      cognome: cf.substr(0, 3),
-      sesso: sesso,
-      data_nascita: dataNascita,
-      comune_nascita: luogoNascita.nome,
-      provincia_nascita: luogoNascita.sigla,
-      cap_nascita: luogoNascita.cap[0],
-      cod_catastale_nascita: luogoNascita.codiceCatastale
+    let luogoNascita = comuni.find(i => i.codiceCatastale === codiceCatastale)
+    let daticf = {}
+    if (luogoNascita) {
+      daticf = {
+        nome: cf.substr(3, 3),
+        cognome: cf.substr(0, 3),
+        sesso: sesso,
+        data_nascita: dataNascita,
+        comune_nascita: luogoNascita.nome,
+        provincia_nascita: luogoNascita.sigla,
+        cap_nascita: luogoNascita.cap[0],
+        cod_catastale_nascita: luogoNascita.codiceCatastale
+      }
     }
+    if (!luogoNascita) {
+      luogoNascita = comuniEsteri.find(i => i.codiceCatastale === codiceCatastale)
+      daticf = {
+        nome: cf.substr(3, 3),
+        cognome: cf.substr(0, 3),
+        sesso: sesso,
+        data_nascita: dataNascita,
+        comune_nascita: luogoNascita.nome,
+        // provincia_nascita: luogoNascita.sigla,
+        // cap_nascita: luogoNascita.cap[0],
+        cod_catastale_nascita: luogoNascita.codiceCatastale
+      }
+    }
+
+    return daticf
   },
 
   stringify: function (data) {
@@ -53,7 +72,7 @@ module.exports = {
     code += (data.cognome.replace(/[^BCDFGHJKLMNPQRSTVWXYZ]/gi, '') + data.cognome.replace(/[^AEIOU]/gi, '') + 'XXX').substr(0, 3)
     code += (data.nome.replace(/[^BCDFGHJKLMNPQRSTVWXYZ]/gi, '') + data.nome.replace(/[^AEIOU]/gi, '') + 'XXX').substr(0, 3)
 
-    const dataNascita = moment(data.dataNascita, 'YYYY-MM-DD')
+    const dataNascita = moment(data.data_nascita, 'YYYY-MM-DD')
     code += dataNascita.format('YY')
     code += monthCodes[parseInt(dataNascita.format('M') - 1, 10)]
 
@@ -72,6 +91,9 @@ module.exports = {
     }
     if (data.cod_catastale_nascita) {
       comuneNascita = comuni.find(i => i.codiceCatastale.toLowerCase() === data.cod_catastale_nascita.toLowerCase())
+      if (!comuneNascita) {
+        comuneNascita = comuniEsteri.find(i => i.codiceCatastale.toLowerCase() === data.cod_catastale_nascita.toLowerCase())
+      }
     }
 
     if (!comuneNascita) {

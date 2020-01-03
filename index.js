@@ -5,12 +5,13 @@ const checkCodeOdd = {
 const checkCodeEven = {
   0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, A: 0, B: 1, C: 2, D: 3, E: 4, F: 5, G: 6, H: 7, I: 8, J: 9, K: 10, L: 11, M: 12, N: 13, O: 14, P: 15, Q: 16, R: 17, S: 18, T: 19, U: 20, V: 21, W: 22, X: 23, Y: 24, Z: 25
 }
+const omocodeTable = ['L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V']
 
 const checkCodeChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 const monthCodes = ['A', 'B', 'C', 'D', 'E', 'H', 'L', 'M', 'P', 'R', 'S', 'T']
 
 const comuni = require('./comuni')
-const comuniEsteri = require('./comuni_esteri')
+const statiEsteri = require('./stati_esteri')
 const moment = require('moment')
 
 module.exports = {
@@ -37,9 +38,8 @@ module.exports = {
 
     const codiceCatastale = cf.substr(11, 4)
     let luogoNascita = comuni.find(i => i.codiceCatastale === codiceCatastale)
-    let daticf = {}
     if (luogoNascita) {
-      daticf = {
+      return {
         nome: cf.substr(3, 3),
         cognome: cf.substr(0, 3),
         sesso: sesso,
@@ -49,22 +49,19 @@ module.exports = {
         cap_nascita: luogoNascita.cap[0],
         cod_catastale_nascita: luogoNascita.codiceCatastale
       }
-    }
-    if (!luogoNascita) {
-      luogoNascita = comuniEsteri.find(i => i.codiceCatastale === codiceCatastale)
-      daticf = {
+    } else {
+      luogoNascita = statiEsteri.find(i => i.codiceCatastale === codiceCatastale)
+      return {
         nome: cf.substr(3, 3),
         cognome: cf.substr(0, 3),
         sesso: sesso,
         data_nascita: dataNascita,
         comune_nascita: luogoNascita.nome,
-        // provincia_nascita: luogoNascita.sigla,
-        // cap_nascita: luogoNascita.cap[0],
+        provincia_nascita: 'EE',
+        cap_nascita: '',
         cod_catastale_nascita: luogoNascita.codiceCatastale
       }
     }
-
-    return daticf
   },
 
   stringify: function (data) {
@@ -91,8 +88,14 @@ module.exports = {
     }
     if (data.cod_catastale_nascita) {
       comuneNascita = comuni.find(i => i.codiceCatastale.toLowerCase() === data.cod_catastale_nascita.toLowerCase())
-      if (!comuneNascita) {
-        comuneNascita = comuniEsteri.find(i => i.codiceCatastale.toLowerCase() === data.cod_catastale_nascita.toLowerCase())
+    }
+
+    if (!comuneNascita) {
+      if (data.cod_catastale_nascita) {
+        comuneNascita = statiEsteri.find(i => i.codiceCatastale.toLowerCase() === data.cod_catastale_nascita.toLowerCase())
+      }
+      if (data.comune_nascita) {
+        comuneNascita = statiEsteri.find(i => i.nome.toLowerCase() === data.comune_nascita.toLowerCase())
       }
     }
 
@@ -114,6 +117,19 @@ module.exports = {
       return false
     }
     return getCheckCode(cf.slice(0, 15)) === cf.charAt(15)
+  },
+
+  getOmocodes: function (code) {
+    const results = []
+    let lastOmocode = (code = code.slice(0, 15))
+    for (let i = code.length - 1; i >= 0; i = i - 1) {
+      const char = code[i]
+      if (char.match(/\d/) !== null) {
+        lastOmocode = lastOmocode.substr(0, i) + omocodeTable[char] + lastOmocode.substr(i + 1)
+        results.push(lastOmocode + getCheckCode(lastOmocode))
+      }
+    }
+    return results
   }
 }
 

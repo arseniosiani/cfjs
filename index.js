@@ -66,8 +66,8 @@ module.exports = {
 
   stringify: function (data) {
     let code = ''
-    code += (data.cognome.replace(/[^BCDFGHJKLMNPQRSTVWXYZ]/gi, '') + data.cognome.replace(/[^AEIOU]/gi, '') + 'XXX').substr(0, 3)
-    code += (data.nome.replace(/[^BCDFGHJKLMNPQRSTVWXYZ]/gi, '') + data.nome.replace(/[^AEIOU]/gi, '') + 'XXX').substr(0, 3)
+    code += (data.cognome.toUpperCase().replace(/[^BCDFGHJKLMNPQRSTVWXYZ]/gi, '') + data.cognome.toUpperCase().replace(/[^AEIOU]/gi, '') + 'XXX').substr(0, 3)
+    code += (data.nome.toUpperCase().replace(/[^BCDFGHJKLMNPQRSTVWXYZ]/gi, '') + data.nome.toUpperCase().replace(/[^AEIOU]/gi, '') + 'XXX').substr(0, 3)
 
     const dataNascita = moment(data.data_nascita, 'YYYY-MM-DD')
     code += dataNascita.format('YY')
@@ -105,7 +105,7 @@ module.exports = {
 
     code += comuneNascita.codiceCatastale
     code += getCheckCode(code)
-    return code
+    return code.toUpperCase()
   },
 
   check: function (cf) {

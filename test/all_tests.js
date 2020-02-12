@@ -54,6 +54,21 @@ describe('parse', function () {
     chai.assert.strictEqual(cf, 'RSSMRA72L09H501S')
   })
 
+  it('stringify anagrafica nomi lowercase', function () {
+    const infos = {
+      nome: 'mario',
+      cognome: 'rossi',
+      sesso: 'm',
+      data_nascita: '1972-07-09',
+      comune_nascita: 'Roma',
+      provincia_nascita: 'RM',
+      cap_nascita: '00118',
+      cod_catastale_nascita: 'H501'
+    }
+    const cf = cfjs.stringify(infos)
+    chai.assert.strictEqual(cf, 'RSSMRA72L09H501S')
+  })
+
   it('stringify anagrafica con solo codice catastale', function () {
     const infos = {
       nome: 'MARIO',

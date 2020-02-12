@@ -1,6 +1,6 @@
 {
   "name": "@arseniosiani/cfjs",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Modulo nodejs che il effettua il check/creazione/parsing del Codice Fiscale italiano",
   "main": "index.js",
   "scripts": {
